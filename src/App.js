@@ -23,10 +23,12 @@ data:[]
 },  
 }
 }
-handleStateChange(value){
-debugger;
+handleStateChange(value,id){
+  var date= this.state.UpComing.data.filter(c=> c.id == id);
+  console.log(date);
 this.setState({
-UpComing:  Object.assign({},this.state.UpComing.data,{createdOn:value})});
+  
+UpComing:  Object.assign({},this.state.UpComing,{createdOn:value})});
 }
 componentDidMount(){
 let liveEvent=[]; let pastEvent=[];let Upcoming=[];
@@ -34,7 +36,6 @@ customData.data.map((data) =>{ if(data.createdOn > new Date().getTime()){Upcomin
 else if(data.createdOn < new Date().getTime()){pastEvent.push(data);}
 else{liveEvent.push(data);}
 });
-console.log(liveEvent,pastEvent,Upcoming);
 this.setState({
 UpComing:  Object.assign({},this.state.UpComing,{data:Upcoming}),
 live:  Object.assign({},this.state.live,{data:liveEvent}),
@@ -75,7 +76,7 @@ render()
          </div>
          <div>
             {this.state.UpComing.showUpcomingData && (this.state.UpComing.data.map(data =>
-            <Table name={data.name} key={data.id} handleStateChange = {this.handleStateChange} price={data.price} date={data.createdOn}/>
+            <Table name={data.name} key={data.id} id={data.id} handleStateChange = {this.handleStateChange} price={data.price} date={data.createdOn}/>
             ))}
          </div>
          <div>
