@@ -36,12 +36,8 @@ frame=" Days Ago";
 var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);       
 return `${event.toLocaleDateString('en-EN', options)} ${parseInt(Difference_In_Days)}  ${frame}`;
 }
-handleCalendar(e, id, itemId)  {
-
-if(e < new Date()){
-    alert("you have entered Past Value");
-}
-else this.props.handleStateChange(e,itemId);
+handleCalendar(e, id,created, itemId)  {
+(created>new Date().getTime())?this.props.handleStateChange(e,itemId):alert("Past Event cannot be Rescheduled");
 document.getElementById(id).style.display="none";
 
 }
@@ -78,7 +74,7 @@ return (
             <td onClick={(e)=> this.handleDate(`calendar-${index}`)}><img src={calendar}/>
                 Schedule Again
                 <div id={`calendar-${index}`}><Calendar onChange={(e)=>
-                  this.handleCalendar(e, `calendar-${index}`, item.id)} value={new Date(item.createdOn)}/></div>
+                  this.handleCalendar(e, `calendar-${index}`,item.createdOn, item.id)} value={new Date(item.createdOn)}/></div>
             </td>
          </tr>
        })
