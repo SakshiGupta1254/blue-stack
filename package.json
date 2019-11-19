@@ -7,12 +7,16 @@
     "react-calendar": "^2.19.2",
     "react-dom": "^16.12.0",
     "react-scripts": "3.2.0"
+	"homepage":"https://SakshiGupta1254.github.io/blue-stack"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+	"predeploy": "npm run build",
+	"deploy": "gh-pages -d build",
+
   },
   "eslintConfig": {
     "extends": "react-app"
