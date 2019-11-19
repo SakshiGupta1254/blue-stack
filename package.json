@@ -10,6 +10,10 @@
     "homepage":"https://sakshigupta1254.github.io/blue-stack"
   },
   "scripts": {
+    "launch":"npm start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "calendar":"npm install react-calendar",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
