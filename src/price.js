@@ -4,10 +4,6 @@ class Price extends React.Component {
         super(props);
         
       }
-      state = { 
-        
-
-     }
     render() {
         return (
             <div>

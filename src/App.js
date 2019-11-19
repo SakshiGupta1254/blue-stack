@@ -23,10 +23,13 @@ data:[]
 },  
 }
 }
-handleStateChange(value){
-debugger;
-this.setState({
-UpComing:  Object.assign({},this.state.UpComing.data,{createdOn:value})});
+handleStateChange(value,id){
+  if(value.getTime()< new Date().getTime()){
+  var date= this.state.UpComing.data.filter(c=> c.id == id);
+  this.state.UpComing.data.pop(date);
+ // this.state.past.data.push(date);
+}
+console.log(this.state.UpComing.data);
 }
 componentDidMount(){
 let liveEvent=[]; let pastEvent=[];let Upcoming=[];
@@ -34,7 +37,6 @@ customData.data.map((data) =>{ if(data.createdOn > new Date().getTime()){Upcomin
 else if(data.createdOn < new Date().getTime()){pastEvent.push(data);}
 else{liveEvent.push(data);}
 });
-console.log(liveEvent,pastEvent,Upcoming);
 this.setState({
 UpComing:  Object.assign({},this.state.UpComing,{data:Upcoming}),
 live:  Object.assign({},this.state.live,{data:liveEvent}),
@@ -63,7 +65,10 @@ past:  Object.assign({},this.state.past,{showPastData:true})
 });
 }
 render()
-{console.log(this.state.UpComing);console.log(this.state.past);return (
+{console.log(this.state.UpComing);console.log(this.state.past);
+  
+  return (
+
 <div>
    {
    <React.Fragment>
@@ -75,17 +80,17 @@ render()
          </div>
          <div>
             {this.state.UpComing.showUpcomingData && (this.state.UpComing.data.map(data =>
-            <Table name={data.name} key={data.id} handleStateChange = {this.handleStateChange} price={data.price} date={data.createdOn}/>
+            <Table name={data.name} key={data.id} id={data.id} handleStateChange = {this.handleStateChange} price={data.price} date={data.createdOn}/>
             ))}
          </div>
          <div>
             {this.state.past.showPastData && (this.state.past.data.map(data =>
-            <Table key={data.id} name={data.name} price={data.price} date={data.createdOn}/>
+            <Table name={data.name} key={data.id} id={data.id} price={data.price} date={data.createdOn}/>
             ))}
          </div>
          <div>
             {this.state.live.showLiveData && (this.state.live.data.map(data =>
-            <Table key={data.id} name={data.name} date={data.createdOn}/>
+            <Table name={data.name} key={data.id} id={data.id} price={data.price} date={data.createdOn}/>
             ))}
          </div>
       </div>

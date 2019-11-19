@@ -1,6 +1,7 @@
 import React from 'react';
 import first from './images/first.png';
 import calendar from './images/calendar.png';
+import ReactDOM from 'react-dom';
 import file from './images/file.png';
 import Price from './price';
 import Priceimg from './images/Price.png';
@@ -16,9 +17,9 @@ callCalendar:false,
 showPrice:false
 }
 handleDate=() => {
-this.setState({
-callCalendar: !this.state.callCalendar,
-});
+
+document.getElementById('calendar').style.display="block";
+
 }
 displayDate=(date)=>{
 var event = new Date(date);
@@ -36,9 +37,9 @@ var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 return `${event.toLocaleDateString('en-EN', options)} ${parseInt(Difference_In_Days)}  ${frame}`;
 }
 handleCalendar(date)  {
-//console.log(this.props.date);
-this.props.handleStateChange(date);       
-debugger; 
+this.props.handleStateChange(date,this.props.id);
+document.getElementById('calendar').style.display="none";
+
 }
 openPopup=() => {
 this.setState({
@@ -67,14 +68,14 @@ return (
             </td>
             <td><img src={file} />CSV</td>
             <td><img src={stat} />Report</td>
-            <td onClick={this.handleDate}>
-                <Calendar onChange={(e)=>
-               this.handleCalendar(e)} value={new Date(this.props.date)}/>
-               <img src={calendar}/>Schedule Again
+            <td onClick={this.handleDate}><img src={calendar}/>
+                Schedule Again
             </td>
          </tr>
       </tbody>
-   </table>
+      </table>
+      <div id="calendar"><Calendar onChange={(e)=>
+    this.handleCalendar(e)} value={new Date(this.props.date)}/></div>
 </div>
 );
 }

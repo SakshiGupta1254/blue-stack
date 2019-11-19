@@ -46,4 +46,7 @@ a {
 .tabs{
   display:flex;
 }
+#calendar{
+  display:none;
+}
 td:nth-child(even){background-color: #f2f2f242}
