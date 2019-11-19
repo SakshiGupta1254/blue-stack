@@ -16,9 +16,9 @@ state = {
 callCalendar:false,
 showPrice:false
 }
-handleDate=() => {
+handleDate=(id) => {
 
-//document.getElementById('calendar').style.display="block";
+document.getElementById(id).style.display="block";
 
 }
 displayDate=(date)=>{
@@ -37,11 +37,11 @@ var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 return `${event.toLocaleDateString('en-EN', options)} ${parseInt(Difference_In_Days)}  ${frame}`;
 }
 handleCalendar(e, id, itemId)  {
-this.props.handleStateChange(e,itemId);
-if(e< new Date()){
+if(e < new Date()){
     alert("you have entered Past Value");
 }
-//document.getElementById(id).style.display="none";
+else this.props.handleStateChange(e,itemId);
+document.getElementById(id).style.display="none";
 
 }
 openPopup=() => {
@@ -74,10 +74,10 @@ return (
             </td>
             <td><img src={file} />CSV</td>
             <td><img src={stat} />Report</td>
-            <td onClick={this.handleDate}><img src={calendar}/>
+            <td onClick={(e)=> this.handleDate(`calendar-${index}`)}><img src={calendar}/>
                 Schedule Again
-                <div id={`calendar_${index}`}><Calendar onChange={(e)=>
-                  this.handleCalendar(e, `calendar_${index}`, item.id)} value={new Date(item.createdOn)}/></div>
+                <div id={`calendar-${index}`}><Calendar onChange={(e)=>
+                  this.handleCalendar(e, `calendar-${index}`, item.id)} value={new Date(item.createdOn)}/></div>
             </td>
          </tr>
        })
