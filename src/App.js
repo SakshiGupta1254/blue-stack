@@ -2,111 +2,104 @@ import React from 'react';
 import Table from './table';
 import customData from './campaign.json'
 import './App.css';
-import { exportDefaultSpecifier } from '@babel/types';
-class App extends React.Component  {
-constructor(props) {
-super(props);
-this.handleStateChange=this.handleStateChange.bind(this);
-this.state = { 
-data:[],
-live: {
-showLiveData: false,
-data:[]
-},
-UpComing:{
-showUpcomingData:true,
-data:[]
-},
-past:{
-showPastData:false,
-data:[]
-},  
-}
-}
-handleStateChange(value,id){
-  if(value.getTime()< new Date().getTime()){
-    const upComingData = this.state.UpComing.data.filter(c => c.id != id);    
-    let filteredObj = this.state.UpComing.data.filter(c => c.id == id);
-    filteredObj[0].createdOn=value.getTime();
-    const pastData = [...this.state.past.data, ...filteredObj];
-    this.setState({
-      UpComing: Object.assign({},this.state.UpComing,{data:upComingData}),
-      past:  Object.assign({},this.state.past,{data:pastData})
-    });
- // this.state.past.data.push(date);
-} else {
-      const upComingData = this.state.UpComing.data.map((c) => {
-        if(c.id == id){
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleStateChange = this.handleStateChange.bind(this);
+    this.state = {
+      live: {
+        show: false,
+        data: []
+      },
+      upComing: {
+        show: true,
+        data: []
+      },
+      past: {
+        show: false,
+        data: []
+      },
+    }
+  }
+  handleStateChange(value, id) {
+    let upComingData = [];
+    if (value.getTime() > new Date().getTime()) {
+      upComingData = this.state.upComing.data.map((c) => {
+        if (c.id == id) {
           c.createdOn = value.getTime();
         }
         return c;
       });
+      this.setState({
+        upComing: Object.assign({}, this.state.upComing, { data: upComingData })
+      });  
+    }
+  }
+  componentDidMount() {
+    const liveEvent = []
+    const pastEvent = []
+    const upComing = [];
+    customData.data.map((data) => {
+      if (data.createdOn > new Date().getTime()) {
+        upComing.push(data);
+      }
+      else if (data.createdOn < new Date().getTime()) {
+        pastEvent.push(data);
+      }
+      else {
+        liveEvent.push(data);
+      }
+    });
     this.setState({
-      UpComing: Object.assign({},this.state.UpComing,{data:upComingData})
-    });      
-}
-console.log(this.state.UpComing.data);
-}
-componentDidMount(){
-let liveEvent=[]; let pastEvent=[];let Upcoming=[]; 
-customData.data.map((data) =>{ if(data.createdOn > new Date().getTime()){Upcoming.push(data);}
-else if(data.createdOn < new Date().getTime()){pastEvent.push(data);}
-else{liveEvent.push(data);}
-});
-this.setState({
-UpComing:  Object.assign({},this.state.UpComing,{data:Upcoming}),
-live:  Object.assign({},this.state.live,{data:liveEvent}),
-past:  Object.assign({},this.state.past,{data:pastEvent})
-});
-}
-upcomingClicked = () => {  
-this.setState({
-UpComing:  Object.assign({},this.state.UpComing,{showUpcomingData:true}),
-live:  Object.assign({},this.state.live,{showLiveData:false}),
-past:  Object.assign({},this.state.past,{showPastData:false})
-});
-}
-liveClicked = () => {  
-this.setState({
-UpComing:  Object.assign({},this.state.UpComing,{showUpcomingData:false}),
-live:  Object.assign({},this.state.live,{showLiveData:true}),
-past:  Object.assign({},this.state.past,{showPastData:false})
-});
-}
-pastClicked = () => {       
-this.setState({
-UpComing:  Object.assign({},this.state.UpComing,{showUpcomingData:false}),
-live:  Object.assign({},this.state.live,{showLiveData:false}),
-past:  Object.assign({},this.state.past,{showPastData:true})
-});
-}
-render()
-{console.log(this.state.UpComing);console.log(this.state.past);
-let campaignData = [];
-if(this.state.UpComing.showUpcomingData) {
-  campaignData = this.state.UpComing.data;
-} else if(this.state.past.showPastData) {
-  campaignData = this.state.past.data;
-} else {
-  campaignData = this.state.live.data;
-}
-  return (
-
-<div>
-   {
-   <React.Fragment>
-      <div class="mainpage">
-         <div class="tabs">
+      upComing: Object.assign({}, this.state.upComing, { data: upComing }),
+      live: Object.assign({}, this.state.live, { data: liveEvent }),
+      past: Object.assign({}, this.state.past, { data: pastEvent })
+    });
+  }
+  upcomingClicked = () => {
+    this.setState({
+      upComing: Object.assign({}, this.state.upComing, { show: true }),
+      live: Object.assign({}, this.state.live, { show: false }),
+      past: Object.assign({}, this.state.past, { show: false })
+    });
+  }
+  liveClicked = () => {
+    this.setState({
+      upComing: Object.assign({}, this.state.upComing, { show: false }),
+      live: Object.assign({}, this.state.live, { show: true }),
+      past: Object.assign({}, this.state.past, { show: false })
+    });
+  }
+  pastClicked = () => {
+    this.setState({
+      upComing: Object.assign({}, this.state.upComing, { show: false }),
+      live: Object.assign({}, this.state.live, { show: false }),
+      past: Object.assign({}, this.state.past, { show: true })
+    });
+  }
+  render() {
+    let campaignData = [];
+    const { upComing, past, live } = this.state;
+    if (upComing.show) {
+      campaignData = upComing.data;
+    } else if (past.show) {
+      campaignData = past.data;
+    } else {
+      campaignData = live.data;
+    }
+    return (
+      <React.Fragment>
+        <div class="mainpage">
+          <div class="tabs">
             <a onClick={this.upcomingClicked}>Upcoming Campaigns</a>
             <a onClick={this.liveClicked}>Live Campaigns</a>
             <a onClick={this.pastClicked}>Past Campaigns</a>
-         </div>
-          <Table data={campaignData} handleStateChange = {this.handleStateChange}/>
-      </div>
-   </React.Fragment>
-   }
-</div>
-)
-}
+          </div>
+          <Table data={campaignData} handleStateChange={this.handleStateChange} />
+        </div>
+      </React.Fragment>
+    )
+  }
 }
 export default App;
